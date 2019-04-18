@@ -26,10 +26,15 @@ Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
-
+" JS Beautify
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
+Plugin 'mattn/emmet-vim'
 "Colors!!!
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'jnurmine/Zenburn'
+"MultiSelect
+Plugin 'terryma/vim-multiple-cursors'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -39,8 +44,9 @@ set splitbelow
 set splitright
 
 if has('gui_running')
+  syntax enable
   set background=dark
-  colorscheme solarized
+  colorscheme solarized 
 else
   colorscheme zenburn
 endif
@@ -58,9 +64,10 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 "Enable folding
-"set foldlevel=99
-"Enable folding with the spacebar
-"nnoremap <space> za
+set foldlevel=99
+"set foldmethod=indent
+"Enable folding with the Ctrl-F 
+nnoremap <C-F> za
 
 " Custom mappings
 let mapleader = " "
@@ -82,12 +89,13 @@ au BufNewFile,BufRead *.py
     \ set wm=0 |
     \ set wrap
 
-au BufNewFile,BufRead *.js, *.html, *.css
+au BufNewFile,BufRead *.html,*.css,*.js
     \ set tabstop=2 |
     \ set softtabstop=2 |
     \ set shiftwidth=2 |
 
-au BufWrite *.py call Flake8() "call flake8 for pep check while writing to a .py file
+" au BufWrite *.py call Flake8() "call flake8 for pep check while writing to a .py file
+autocmd FileType python map <buffer> <leader>f :call Flake8()<CR>
 
 " Use the below highlight group when displaying bad whitespace is desired.
 highlight BadWhitespace ctermbg=red guibg=darkred
@@ -138,8 +146,8 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips", $HOME."/.vim/bundle/ultisnips"]
 let g:UltiSnipsEditSplit="vertical"
 
 let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-h>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+let g:UltiSnipsJumpForwardTrigger="<c-k>"
+let g:UltiSnipsJumpBackwardTrigger="<c-l>"
 
 let g:ycm_complete_in_comments = 1
 let g:ycm_seed_identifiers_with_syntax = 1
@@ -147,3 +155,22 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 1
 
 "set directory for swap files
 set directory^=$HOME/.vim/swap//
+"changing working directory to current file
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+
+" FoldMethod
+"augroup vimrc
+"  au BufReadPre * setlocal foldmethod=indent
+"  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+"augroup END
+" Search Selection
+vnoremap // y/<C-R>"<CR>
+"jsx emmet plugin for easier jsx
+let g:user_emmet_settings = {
+	\ 'javascript.jsx' : {
+	\ 	'extends' : 'jsx',
+	\ },
+	\}
+"keep selection in Visual mode
+vnoremap > >gv
+vnoremap < <gv
