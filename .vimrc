@@ -21,12 +21,12 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'kien/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
+Plugin 'mhartington/oceanic-next'
 Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 " Track the engine.
 Plugin 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
-" JS Beautify
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 Plugin 'mattn/emmet-vim'
@@ -35,7 +35,8 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'jnurmine/Zenburn'
 "MultiSelect
 Plugin 'terryma/vim-multiple-cursors'
-
+Plugin 'elzr/vim-json'
+Plugin 'moll/vim-node'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " enables filetype detection
@@ -48,7 +49,7 @@ if has('gui_running')
   set background=dark
   colorscheme solarized 
 else
-  colorscheme zenburn
+  colorscheme OceanicNext 
 endif
 
 "insert mode escape remap
@@ -65,9 +66,9 @@ nnoremap <C-H> <C-W><C-H>
 
 "Enable folding
 set foldlevel=99
-"set foldmethod=indent
-"Enable folding with the Ctrl-F 
 nnoremap <C-F> za
+set fdm=indent "set foldmethod to indent
+au Syntax c,cpp,vim,xml,html,xhtml,perl,python normal zR
 
 " Custom mappings
 let mapleader = " "
@@ -94,8 +95,7 @@ au BufNewFile,BufRead *.html,*.css,*.js
     \ set softtabstop=2 |
     \ set shiftwidth=2 |
 
-" au BufWrite *.py call Flake8() "call flake8 for pep check while writing to a .py file
-autocmd FileType python map <buffer> <leader>f :call Flake8()<CR>
+au FileType python map <buffer> <leader>f :call Flake8()<CR>
 
 " Use the below highlight group when displaying bad whitespace is desired.
 highlight BadWhitespace ctermbg=red guibg=darkred
@@ -107,16 +107,6 @@ let g:ycm_autoclose_preview_window_after_completion=1
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 map <F2> :echo 'Current time is ' . strftime('%c')<CR>
 map <Y> :y$
-
-"python with virtualenv support
-"py << EOF
-"import os
-"import sys
-"if 'VIRTUAL_ENV' in os.environ:
-"  project_base_dir = os.environ['VIRTUAL_ENV']
-"  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-"  execfile(activate_this, dict(__file__=activate_this))
-"EOF
 
 let python_highlight_all=1
 call togglebg#map("<F5>")
@@ -135,8 +125,6 @@ au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
 syntax on
 
 set laststatus=2 "always display status line 
-set fdm=indent "set foldmethod to indent
-autocmd Syntax c,cpp,vim,xml,html,xhtml,perl,python normal zR
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsSnippetsDir=$HOME.'/.vim/UltiSnips/'
@@ -158,12 +146,6 @@ set directory^=$HOME/.vim/swap//
 "changing working directory to current file
 nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
-" FoldMethod
-"augroup vimrc
-"  au BufReadPre * setlocal foldmethod=indent
-"  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-"augroup END
-" Search Selection
 vnoremap // y/<C-R>"<CR>
 "jsx emmet plugin for easier jsx
 let g:user_emmet_settings = {
