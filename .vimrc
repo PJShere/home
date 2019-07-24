@@ -1,5 +1,4 @@
 set nocompatible              " required
-filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -29,7 +28,6 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
-Plugin 'mattn/emmet-vim'
 "Colors!!!
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'jnurmine/Zenburn'
@@ -37,6 +35,7 @@ Plugin 'jnurmine/Zenburn'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'elzr/vim-json'
 Plugin 'moll/vim-node'
+Plugin 'mrk21/yaml-vim'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " enables filetype detection
@@ -45,11 +44,11 @@ set splitbelow
 set splitright
 
 if has('gui_running')
-  syntax enable
-  set background=dark
-  colorscheme solarized 
+	syntax enable
+	set background=dark
+	colorscheme solarized 
 else
-  colorscheme OceanicNext 
+	colorscheme OceanicNext 
 endif
 
 "insert mode escape remap
@@ -79,22 +78,22 @@ nnoremap <leader>qq :q!<cr>
 nnoremap <leader>t :tabn<cr>
 
 au BufNewFile,BufRead *.py
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
-    \ set textwidth=79 |
-    \ set expandtab |
-    \ set autoindent |
-    \ set fileformat=unix |
-    \ set fo-=t |
-    \ set wm=0 |
-    \ set wrap
+			\ set tabstop=4 |
+			\ set softtabstop=4 |
+			\ set shiftwidth=4 |
+			\ set textwidth=79 |
+			\ set expandtab |
+			\ set autoindent |
+			\ set fileformat=unix |
+			\ set fo-=t |
+			\ set wm=0 |
+			\ set wrap
 
-au BufNewFile,BufRead *.html,*.css,*.js
-    \ set tabstop=2 |
-    \ set softtabstop=2 |
-    \ set shiftwidth=2 |
-
+au BufNewFile,BufRead *.html,*.css,*.js,*.jsx
+			\ set tabstop=2 |
+			\ set softtabstop=2 |
+			\ set shiftwidth=2 |
+autocmd BufRead,BufNewFile *.js    setf javascript
 au FileType python map <buffer> <leader>f :call Flake8()<CR>
 
 " Use the below highlight group when displaying bad whitespace is desired.
@@ -147,12 +146,12 @@ set directory^=$HOME/.vim/swap//
 nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
 vnoremap // y/<C-R>"<CR>
-"jsx emmet plugin for easier jsx
-let g:user_emmet_settings = {
-	\ 'javascript.jsx' : {
-	\ 	'extends' : 'jsx',
-	\ },
-	\}
 "keep selection in Visual mode
 vnoremap > >gv
 vnoremap < <gv
+autocmd User Node if &filetype == "javascript" | setlocal expandtab | endif
+autocmd User Node
+  \ if &filetype == "javascript" |
+  \   nmap <buffer> <C-w>f <Plug>NodeVSplitGotoFile |
+  \   nmap <buffer> <C-w><C-f> <Plug>NodeVSplitGotoFile |
+  \ endif
